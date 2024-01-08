@@ -2,10 +2,10 @@ import { ERROR_INVALID_ACCOUNT_DATA, ERROR_INVALID_OWNER } from '../errors';
 import { AnyPublicKey } from '../types';
 import { Account } from './Account';
 import {
-  AccountInfo as TokenAccountInfo,
+  Account as TokenAccountInfo,
   AccountLayout,
   TOKEN_PROGRAM_ID,
-  u64,
+  unpackAccount,
 } from '@solana/spl-token';
 import { AccountInfo, Connection, PublicKey } from '@solana/web3.js';
 import { Buffer } from 'buffer';
@@ -22,7 +22,7 @@ export class TokenAccount extends Account<TokenAccountInfo> {
       throw ERROR_INVALID_ACCOUNT_DATA();
     }
 
-    this.data = deserialize(this.info.data);
+    this.data = unpackAccount(new PublicKey(pubkey.toString()), this.info);
   }
 
   static isCompatible(data: Buffer) {
@@ -37,37 +37,3 @@ export class TokenAccount extends Account<TokenAccountInfo> {
     ).value.map(({ pubkey, account }) => new TokenAccount(pubkey, account));
   }
 }
-
-export const deserialize = (data: Buffer) => {
-  const accountInfo = AccountLayout.decode(data);
-  accountInfo.mint = new PublicKey(accountInfo.mint);
-  accountInfo.owner = new PublicKey(accountInfo.owner);
-  accountInfo.amount = u64.fromBuffer(accountInfo.amount);
-
-  if (accountInfo.delegateOption === 0) {
-    accountInfo.delegate = null;
-    accountInfo.delegatedAmount = new u64(0);
-  } else {
-    accountInfo.delegate = new PublicKey(accountInfo.delegate);
-    accountInfo.delegatedAmount = u64.fromBuffer(accountInfo.delegatedAmount);
-  }
-
-  accountInfo.isInitialized = accountInfo.state !== 0;
-  accountInfo.isFrozen = accountInfo.state === 2;
-
-  if (accountInfo.isNativeOption === 1) {
-    accountInfo.rentExemptReserve = u64.fromBuffer(accountInfo.isNative);
-    accountInfo.isNative = true;
-  } else {
-    accountInfo.rentExemptReserve = null;
-    accountInfo.isNative = false;
-  }
-
-  if (accountInfo.closeAuthorityOption === 0) {
-    accountInfo.closeAuthority = null;
-  } else {
-    accountInfo.closeAuthority = new PublicKey(accountInfo.closeAuthority);
-  }
-
-  return accountInfo;
-};

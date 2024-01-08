@@ -7,7 +7,7 @@ var ErrorCode;
     ErrorCode[ErrorCode["ERROR_INVALID_ACCOUNT_DATA"] = 1] = "ERROR_INVALID_ACCOUNT_DATA";
     ErrorCode[ErrorCode["ERROR_DEPRECATED_ACCOUNT_DATA"] = 2] = "ERROR_DEPRECATED_ACCOUNT_DATA";
     ErrorCode[ErrorCode["ERROR_ACCOUNT_NOT_FOUND"] = 3] = "ERROR_ACCOUNT_NOT_FOUND";
-})(ErrorCode = exports.ErrorCode || (exports.ErrorCode = {}));
+})(ErrorCode || (exports.ErrorCode = ErrorCode = {}));
 class MetaplexError extends Error {
     constructor(errorCode, message) {
         super(message);

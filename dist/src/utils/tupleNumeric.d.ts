@@ -1,4 +1,3 @@
-import BN from 'bn.js';
 export declare enum TupleNumericType {
     U8 = 1,
     U16 = 2,

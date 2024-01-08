@@ -2,7 +2,7 @@
 import { AccountInfo, Commitment, PublicKey, Connection } from '@solana/web3.js';
 import { AnyPublicKey } from '../types';
 import { Buffer } from 'buffer';
-export declare type AccountConstructor<T> = {
+export type AccountConstructor<T> = {
     new (pubkey: AnyPublicKey, info: AccountInfo<Buffer>): T;
 };
 export declare class Account<T = unknown> {

@@ -11,7 +11,7 @@ var TupleNumericType;
     TupleNumericType[TupleNumericType["U16"] = 2] = "U16";
     TupleNumericType[TupleNumericType["U32"] = 4] = "U32";
     TupleNumericType[TupleNumericType["U64"] = 8] = "U64";
-})(TupleNumericType = exports.TupleNumericType || (exports.TupleNumericType = {}));
+})(TupleNumericType || (exports.TupleNumericType = TupleNumericType = {}));
 const getBNFromData = (data, offset, dataType) => {
     switch (dataType) {
         case TupleNumericType.U8:
